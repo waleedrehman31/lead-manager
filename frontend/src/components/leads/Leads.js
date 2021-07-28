@@ -6,15 +6,17 @@ import { getLeads, deleteLead } from "../../actions/leads";
 export class Leads extends Component {
   static propTypes = {
     leads: PropTypes.array.isRequired,
+    getLeads: PropTypes.func.isRequired,
+    deleteLead: PropTypes.func.isRequired,
   };
+
+  deleteLead(id) {
+    this.props.deleteLead(id);
+  }
 
   componentDidMount() {
     this.props.getLeads();
   }
-
-  delete = (id) => {
-    this.deleteLead(id);
-  };
 
   render() {
     return (
@@ -27,7 +29,6 @@ export class Leads extends Component {
               <th>Name</th>
               <th>Email</th>
               <th>Message</th>
-              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -39,7 +40,7 @@ export class Leads extends Component {
                 <td>{lead.message}</td>
                 <td>
                   <button
-                    onClick={this.delete(lead.id)}
+                    onClick={this.deleteLead.bind(this, lead.id)}
                     className="btn btn-danger btn-sm"
                   >
                     {" "}
@@ -59,4 +60,4 @@ const mapStateToProp = (state) => ({
   leads: state.leads.leads,
 });
 
-export default connect(mapStateToProp, { getLeads })(Leads);
+export default connect(mapStateToProp, { getLeads, deleteLead })(Leads);
